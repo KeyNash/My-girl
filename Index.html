@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="icon" type="image/png" href="Assets/Images/WhatsApp Image 2026-01-29 at 21.15.05.jpeg">
+    <title>My girl My girl My girl!</title>
+</head>
+<body>
+<div class="body-overlay"></div>
+<div class="body-background"></div>
+  <main class="container">
+
+    <!-- Intro -->
+    <section class="section intro">
+      <p class="soft-text">Hey Nasra 😊</p>
+      <h1>Yk the other day it rained so hard, I couldn't help but think, maybe u were the reason, "Rainees"😁</h1>
+      <p class="hint"> Okay then, I kinda made something for u, so js scroll pole pole and see what's up😉💗</p>
+    </section>
+
+    <!-- Sweet words -->
+    <section class="section sweet">
+      <p>Hey ma'am, I'm so grateful to have u as my girl. I never thought for a moment that I'd be this happy,
+        and well I'm really glad that its you, ik its not been long but i feel like we've been here our whole lives,
+        so thanks for saying yes on that day,😊 yk when. Btw dont get stolen by monkeys or something cause I'd be really sad,
+         unless ofc the monkey is me😂😂</p>
+      <p>I hope this goes on with the same energy till the end, which i think doesnt exist for us😘.
+         That said, I just wanna remind you how perfect u are.        
+              <!-- added: reveal button + hidden extra content (images + more text) -->
+               <br>
+              <button id="reveal-btn" class="yes-btn" aria-expanded="false">Click me</button>
+        
+              <div id="extra" class="hidden extra-content" aria-hidden="true">
+                <div class="imgs">
+                  <img src="Assets/Images/love1.jpeg" alt="my wife" />
+                </div>
+                <p>See how beautiful you are, not just the way you look, but the way you make me feel too.
+                   and how you always know how to make me smile, even on my worst days.
+                   You have this amazing ability to light up my world, 
+                   and I just want you to know that I appreciate every little thing about you.
+                </p>
+                <div class="imgs">
+                  <img src="Assets/Images/love2.jpeg" alt="my wife" />
+                </div>
+        
+                <p>All this tells me that you're enough. What more would I ask for? 💖</p>
+              </div>
+            </section>
+        
+        <!-- added script to toggle the extra content -->
+      <p>Anyway, ik u thought that this wasn't gonna happen but here we go...😎🤞
+        Just keep scrolling my love💋
+      </p>
+    </section>
+
+    <!-- Build up -->
+    <section class="section buildup">
+      <p>So you're doing exacly what daddy says huh?😋😎
+        okay, good girl, now keep going.😁
+      </p>
+    </section>
+
+    <!-- Question -->
+    <section class="section question">
+      <h2>Will you be my Valentine? 💖</h2>
+
+      <div class="buttons">
+        <button class="yes-btn">Yes Dzaddy💕</button>
+        <button class="no-btn">No 😌</button>
+      </div>
+    </section>
+
+    <!-- Surprise (hidden for now) -->
+    <section class="section surprise hidden" aria-hidden="true">
+        <div id="heart-field" class="floating-hearts">
+            ❤❤❤❤🧡🧡❤💛🧡💗💗💓💓💗💓💗💗💗💗💗💓💚💚💛💛🧡🧡❤💙💜🤎💜💙💚💚💛💛🧡🧡❤❤
+        </div>
+      <h2>Damn... now ik u love me more💥💘</h2>
+      <p>Idk if u noticed but the no button doesnt work, cause I knew you'd choose yes.😁</p>
+      <p>I love you so much mamaa❤❤❤</p>
+    </section>
+</main>
+<script>
+(function () {
+  // Ensure DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else init();
+
+  function init() {
+    const overlay = document.querySelector('.body-overlay');
+    if (overlay) overlay.style.pointerEvents = 'none';
+
+    const revealBtn = document.getElementById('reveal-btn');
+    const extra = document.getElementById('extra');
+    const yesBtn = document.querySelector('.question .yes-btn');
+    const surpriseSection = document.querySelector('.section.surprise');
+
+    injectFloatingHeartStyles();
+    injectSurpriseHeartStyles();
+
+    // "Click me" button toggle
+    if (revealBtn && extra) {
+      revealBtn.addEventListener('click', () => {
+        const isVisible = !extra.classList.toggle('hidden');
+        extra.setAttribute('aria-hidden', String(!isVisible));
+        revealBtn.setAttribute('aria-expanded', String(isVisible));
+        revealBtn.textContent = isVisible ? 'Hide' : 'Click me';
+      });
+    }
+
+    // Yes button: floating hearts + reveal surprise
+    if (!yesBtn || !surpriseSection) return;
+
+    let running = false;
+    yesBtn.addEventListener('click', async () => {
+      if (running) return;
+      running = true;
+      yesBtn.disabled = true;
+
+      const emojis = ['❤','💖','💗','💘','💝','💞','💓','🧡','💛','💚','💙','💜','💟'];
+      const total = 40;
+      const gap = 60;
+
+      // Spawn random hearts
+      for (let i = 0; i < total; i++) {
+        spawnHeart(emojis[Math.floor(Math.random() * emojis.length)]);
+        await wait(gap);
+      }
+
+      // Reveal surprise section
+      surpriseSection.classList.remove('hidden');
+      surpriseSection.classList.add('show');
+      surpriseSection.setAttribute('aria-hidden', 'false');
+      surpriseSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Animate inner hearts
+      requestAnimationFrame(() => animateSurpriseHearts());
+
+      // Clean up floating hearts after animation
+      await wait(4500);
+      document.querySelectorAll('.heart').forEach(h => h.remove());
+    });
+
+    function spawnHeart(ch) {
+      const el = document.createElement('div');
+      el.className = 'heart';
+      el.textContent = ch;
+
+      const tx = Math.round(Math.random() * 500 - 250) + 'px';
+      el.style.setProperty('--tx', tx);
+
+      const size = 16 + Math.random() * 32;
+      el.style.fontSize = size + 'px';
+
+      const dur = 2500 + Math.random() * 1200;
+      el.style.animationDuration = dur + 'ms';
+
+      el.style.left = '50%';
+      el.style.bottom = (8 + Math.random() * 12) + 'px';
+
+      document.body.appendChild(el);
+
+      setTimeout(() => {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }, dur + 600);
+    }
+
+    function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function animateSurpriseHearts() {
+      const field = document.getElementById('heart-field');
+      if (!field) return;
+      const chars = (field.textContent || '').trim().split('');
+      field.textContent = '';
+
+      chars.forEach((ch, i) => {
+        const sp = document.createElement('span');
+        sp.className = 's-heart';
+        sp.textContent = ch;
+
+        sp.style.left = 50 + (Math.random() * 80 - 40) + '%';
+        sp.style.fontSize = (20 + Math.random() * 26) + 'px';
+        sp.style.animationDelay = (i * 50 + Math.random() * 400) + 'ms';
+        field.appendChild(sp);
+      });
+    }
+
+    // Inject floating hearts CSS
+    function injectFloatingHeartStyles() {
+      if (document.getElementById('heart-styles')) return;
+      const css = `
+        .heart {
+          position: fixed;
+          left: 50%;
+          bottom: 12px;
+          transform: translateX(-50%);
+          pointer-events: none;
+          z-index: 9999;
+          will-change: transform, opacity;
+          animation-name: heart-float;
+          animation-timing-function: cubic-bezier(.2,.8,.2,1);
+          animation-fill-mode: forwards;
+          filter: drop-shadow(0 0 4px pink);
+        }
+        @keyframes heart-float {
+          0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+          25% { transform: translateX(calc(-50% + var(--tx, 0px))) translateY(-20vh) scale(1.2) rotate(10deg); }
+          50% { transform: translateX(calc(-50% + var(--tx, 0px))) translateY(-40vh) scale(1.3) rotate(-10deg); }
+          75% { transform: translateX(calc(-50% + var(--tx, 0px))) translateY(-60vh) scale(1.2) rotate(15deg); }
+          100% { opacity: 0; transform: translateX(calc(-50% + var(--tx, 0px))) translateY(-80vh) scale(1.4) rotate(-15deg); }
+        }
+      `;
+      const s = document.createElement('style');
+      s.id = 'heart-styles';
+      s.appendChild(document.createTextNode(css));
+      document.head.appendChild(s);
+    }
+
+    // Inject surprise section hearts CSS
+    function injectSurpriseHeartStyles() {
+      if (document.getElementById('surprise-heart-styles')) return;
+      const css = `
+        .floating-hearts { position: relative; height: 140px; overflow: visible; }
+        .floating-hearts .s-heart {
+          position: absolute;
+          bottom: 6px;
+          transform: translateY(0) rotate(0deg);
+          pointer-events: none;
+          opacity: 0;
+          animation: s-float 3600ms cubic-bezier(.25,.8,.25,1) forwards;
+          filter: drop-shadow(0 0 5px pink);
+        }
+        @keyframes s-float {
+          0% { opacity: 0; transform: translateY(0) scale(0.8) rotate(0deg); }
+          20% { opacity: 1; transform: translateY(-10vh) scale(1.05) rotate(15deg); }
+          50% { transform: translateY(-35vh) scale(1.1) rotate(-10deg); }
+          80% { transform: translateY(-60vh) scale(1.05) rotate(10deg); }
+          100% { transform: translateY(-75vh) scale(1) rotate(0deg); opacity: 0; }
+        }
+      `;
+      const s = document.createElement('style');
+      s.id = 'surprise-heart-styles';
+      s.appendChild(document.createTextNode(css));
+      document.head.appendChild(s);
+    }
+  }
+})();
+</script>
+
+</body>
+</html>
